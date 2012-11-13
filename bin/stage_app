@@ -1,8 +1,30 @@
 #!/usr/bin/env ruby
 
+$:.unshift(File.expand_path("../../vcap-staging/lib", __FILE__))
+$:.unshift(File.expand_path("../../vcap-common/lib", __FILE__))
 require "vcap/staging"
+require "fileutils"
+require "yaml"
 
 app_name = 'sinatra'
 app_path = File.expand_path("../../apps/#{app_name}", __FILE__)
+cfg_filename = File.expand_path("../../config/stage-sinatra.yml", __FILE__)
 
-p staging_plugin = StagingPlugin.load_plugin_for("sinatra")
+destination_directory = YAML.load_file(cfg_filename)["dest_dir"]
+FileUtils.rm_rf(destination_directory)
+FileUtils.mkdir_p(destination_directory)
+
+ENV['PLATFORM_CONFIG'] = File.expand_path("../../config/platform.yml", __FILE__)
+
+staging_plugin_class = StagingPlugin.load_plugin_for("sinatra")
+FileUtils.chdir(File.expand_path("../..", __FILE__)) do
+  staging_plugin = staging_plugin_class.from_file(cfg_filename)
+  staging_plugin.stage_application
+  puts <<-EOS
+startup script:
+cat #{File.join(staging_plugin.destination_directory, "startup")}
+
+stop script:
+cat #{File.join(staging_plugin.destination_directory, "stop")}
+  EOS
+end

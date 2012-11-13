@@ -1,0 +1,3 @@
+---
+cache: /tmp/staging-apps-in-cloudfoundry/.vcap_gems
+insight_agent: /var/vcap/packages/insight_agent/insight-agent.zip

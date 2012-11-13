@@ -1,3 +1,9 @@
 [submodule "vcap-staging"]
 	path = vcap-staging
 	url = git://github.com/cloudfoundry/vcap-staging.git
+[submodule "stager"]
+	path = stager
+	url = git://github.com/cloudfoundry/stager.git
+[submodule "vcap-common"]
+	path = vcap-common
+	url = git://github.com/cloudfoundry/vcap-common.git

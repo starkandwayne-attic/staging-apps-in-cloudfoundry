@@ -1,0 +1,43 @@
+# {
+#   "source_dir"             => String,        # Location of the unstaged app
+#   "dest_dir"               => String,        # Where to place the staged app
+# 
+#   optional("secure_user") => {               # Drop privs to this user
+#     "uid"           => Integer,
+#     optional("gid") => Integer
+#   },
+# 
+#   optional("environment") => {               # This is misnamed, but it is called this
+#     "services"  => [Hash],                   # throughout the existing staging code. We use
+#     "framework_info" => Hash,                # it to maintain consistency.
+#     "runtime_info" => Hash,
+#     "resources" => {
+#       "memory" => Integer,
+#       "disk"   => Integer,
+#       "fds"    => Integer
+#     }
+#   }
+# }
+
+source_dir: 'apps/sinatra/app'
+dest_dir: '/tmp/staging-apps-in-cloudfoundry/staging/sinatra'
+environment:
+  services: []
+  framework_info:
+    name: sinatra
+    runtimes:
+      - ruby18:
+          default: true
+      - ruby19:
+          default: false
+    detection:
+      - "*.rb": "\\s*require[\\s\\(]*['\"]sinatra(/base)?['\"]" # .rb files in the root dir containing a require?
+      - config/environment.rb: false # and config/environment.rb must not exist
+  runtime_info:
+    name: 'ruby19'
+    executable: 'ruby'
+    version: '1.9.3'
+  resources:
+    memory: 256
+    disk: 256
+    fds: 1024
