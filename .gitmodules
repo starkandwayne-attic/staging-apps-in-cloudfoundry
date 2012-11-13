@@ -1,0 +1,3 @@
+[submodule "vcap-staging"]
+	path = vcap-staging
+	url = git://github.com/cloudfoundry/vcap-staging.git

@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "vcap/staging"
+
+app_name = 'sinatra'
+app_path = File.expand_path("../../apps/#{app_name}", __FILE__)
+
+p staging_plugin = StagingPlugin.load_plugin_for("sinatra")
