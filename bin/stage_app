@@ -8,14 +8,17 @@ require "yaml"
 
 app_name = 'sinatra'
 app_path = File.expand_path("../../apps/#{app_name}", __FILE__)
-cfg_filename = File.expand_path("../../config/stage-sinatra.yml", __FILE__)
 
+# a staging environment has fixed configuration
+ENV['PLATFORM_CONFIG'] = File.expand_path("../../config/platform.yml", __FILE__)
+
+# configuration for the specific code base/app being staged
+cfg_filename = File.expand_path("../../config/stage-sinatra.yml", __FILE__)
 destination_directory = YAML.load_file(cfg_filename)["dest_dir"]
 FileUtils.rm_rf(destination_directory)
 FileUtils.mkdir_p(destination_directory)
 
-ENV['PLATFORM_CONFIG'] = File.expand_path("../../config/platform.yml", __FILE__)
-
+# find the staging plugin and stage the app
 staging_plugin_class = StagingPlugin.load_plugin_for("sinatra")
 FileUtils.chdir(File.expand_path("../..", __FILE__)) do
   staging_plugin = staging_plugin_class.from_file(cfg_filename)
