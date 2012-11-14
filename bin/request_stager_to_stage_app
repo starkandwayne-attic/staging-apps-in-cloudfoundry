@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+require "nats/client"
+require "json"
+
+QUEUE = 'staging' # as agreed in config/stager.yml
+
+NATS.start do
+  NATS.subscribe('>') { |msg, reply, sub| puts "Msg received on [#{sub}] : '#{msg}'" }
+
+  staging_request = {
+    app_id: 'my-sinatra-app',
+    download_uri: dl_uri,
+    upload_uri: ul_hdl.upload_uri,
+
+    # properties == 'environment' from config/stage-sinatra.yml
+    properties: { 
+      services: [],
+      framework_info: {
+        name: "sinatra",
+        runtimes: [
+          { ruby18: { default: true} },
+          { ruby19: { default: false} }
+        ],
+        detection: [
+          "*.rb": "\\s*require[\\s\\(]*['\"]sinatra(/base)?['\"]", # .rb files in the root dir containing a require?
+          { "config/environment.rb" => false } # and config/environment.rb must not exist}
+        ]
+      },
+      runtime_info: {
+        name: 'ruby19',
+        executable: 'ruby',
+        version: '1.9.3'
+      },
+      resources: {
+        memory: 256,
+        disk: 256,
+        fds: 1024
+      }
+    }
+  }
+
+  NATS.request(QUEUE, request.to_json) do |result|
+    output = JSON.parse(result)
+  end
+end
