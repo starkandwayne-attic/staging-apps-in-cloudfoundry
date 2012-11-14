@@ -4,7 +4,9 @@ In one terminal run the services:
 
 ```
 $ foreman start
-...
+22:12:30 nats.1          | started with pid 24243
+22:12:30 stager.1        | started with pid 24244
+22:12:30 stager_client.1 | started with pid 24245
 22:12:33 stager.1        | [2012-11-13 22:12:33.985133] vcap.stager.server - pid=24244 tid=a6d4 fid=c693   INFO -- Subscribed to staging
 22:12:33 stager.1        | [2012-11-13 22:12:33.986252] vcap.stager.server - pid=24244 tid=a6d4 fid=c693   INFO -- Server running
 22:12:34 stager_client.1 | [2012-11-13 22:12:34] INFO  WEBrick 1.3.1
