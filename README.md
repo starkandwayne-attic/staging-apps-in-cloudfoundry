@@ -1,4 +1,4 @@
-
+# Demonstration of the Cloud Foundry stager service in isolation
 
 In one terminal run the services:
 
