@@ -46,5 +46,7 @@ NATS.start do
 
   NATS.request(QUEUE, staging_request.to_json) do |result|
     output = JSON.parse(result)
+    puts output["task_log"]
+    NATS.stop
   end
 end
