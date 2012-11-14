@@ -17,6 +17,7 @@ GEM
       json_pure (>= 1.7.3)
       thin (>= 1.4.1)
     rack (1.4.1)
+    rake (10.0.0)
     thin (1.5.0)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -29,4 +30,5 @@ PLATFORMS
 DEPENDENCIES
   foreman
   nats
+  rake
   vcap_stager!

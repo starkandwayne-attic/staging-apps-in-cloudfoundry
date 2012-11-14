@@ -19,7 +19,7 @@
 #   }
 # }
 
-source_dir: 'apps/sinatra/app'
+source_dir: 'apps/sinatra-app'
 dest_dir: '/tmp/staging-apps-in-cloudfoundry/staging/sinatra'
 environment:
   services: []

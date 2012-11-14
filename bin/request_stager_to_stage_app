@@ -5,13 +5,17 @@ require "json"
 
 QUEUE = 'staging' # as agreed in config/stager.yml
 
+app_id = "my-sinatra-app"
+stager_client = "http://localhost:9292" # set in Procfile
+upload_id = "upload_id"
+
 NATS.start do
   NATS.subscribe('>') { |msg, reply, sub| puts "Msg received on [#{sub}] : '#{msg}'" }
 
   staging_request = {
-    app_id: 'my-sinatra-app',
-    download_uri: dl_uri,
-    upload_uri: ul_hdl.upload_uri,
+    app_id: app_id,
+    download_uri: "#{stager_client}/download_unstaged_app/#{app_id}",
+    upload_uri: "#{stager_client}/upload_droplet/#{app_id}/#{upload_id}",
 
     # properties == 'environment' from config/stage-sinatra.yml
     properties: { 
@@ -23,8 +27,8 @@ NATS.start do
           { ruby19: { default: false} }
         ],
         detection: [
-          "*.rb": "\\s*require[\\s\\(]*['\"]sinatra(/base)?['\"]", # .rb files in the root dir containing a require?
-          { "config/environment.rb" => false } # and config/environment.rb must not exist}
+          "*.rb" => "\\s*require[\\s\\(]*['\"]sinatra(/base)?['\"]", # .rb files in the root dir containing a require?
+          "config/environment.rb" => false                           # and config/environment.rb must not exist}
         ]
       },
       runtime_info: {
@@ -40,7 +44,7 @@ NATS.start do
     }
   }
 
-  NATS.request(QUEUE, request.to_json) do |result|
+  NATS.request(QUEUE, staging_request.to_json) do |result|
     output = JSON.parse(result)
   end
 end
