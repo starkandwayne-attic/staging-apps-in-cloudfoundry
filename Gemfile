@@ -1,3 +1,6 @@
 source "https://rubygems.org"
 
-gem "vcap_staging", path: "vcap-staging", require: 'vcap/staging'
+gem "nats"
+gem "vcap_stager", path: "stager"
+
+gem "foreman"
