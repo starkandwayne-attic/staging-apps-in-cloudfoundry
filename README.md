@@ -3,6 +3,8 @@
 In one terminal run the services:
 
 ```
+$ git submodule update --init
+$ bundle
 $ foreman start
 22:12:30 nats.1          | started with pid 24243
 22:12:30 stager.1        | started with pid 24244

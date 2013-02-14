@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+cd vcap-common && bundle install && cd ..
+cd vcap-staging && bundle install && cd ..
+cd stager && bundle install && cd ..
+cd apps/staging_client_service && bundle install && cd ../..
+bundle install
