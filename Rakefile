@@ -2,6 +2,15 @@ require "fileutils"
 
 root = File.expand_path("..", __FILE__)
 
+desc "install all gem dependencies"
+task :bundle_install do
+  bundle_cmd = "bundle install"
+
+  %w(vcap-common vcap-staging stager .).each do |component|
+    sh "cd #{component} && rm -rf .bundle && #{bundle_cmd}"
+  end
+end
+
 %w[sinatra-app].each do |app|
   file "apps/#{app}.tgz" => "apps/#{app}/" do |t|
     sh "tar -czf #{t.name} -C #{t.prerequisites[0]} ."
